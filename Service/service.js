@@ -35,3 +35,28 @@ export const searchForPrice = (price) => {
 export const searchForCategory = (category) => {
   return products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
 };
+
+//Adiciona um novo produto
+export const addProduct =(newProduct) => {
+  const id = products.length > 0 ? products[products.length -1].id + 1 : 1;
+  const product = {id,...newProduct};
+  products.push(product);
+  return product;
+};
+//atualiza um produto existente
+export const updateProduct = (id, updateData) => {
+  id = Number(id);
+  const index = products.findIndex(p => p.id === id);
+  if(index=== -1)  return null;
+  products[index] = {...products[index], ...updateData };
+  return products[index];
+};
+
+//deleta um produto
+export const deleteProduct = (id) => {
+  id = Number(id);
+  const index = products.findIndex(p => p.id === id);
+  if(index === -1) return false;
+  products.splice(index, 1)
+  return true;
+}
