@@ -5,6 +5,6 @@ export const validarNome = (req, res, next) => {
         return res.status(400).json({erro: "O nome do produto deve ser informado"})
     };
 
-    req.name = name.trim();
+    req.name = name.trim().toLowerCase();
     next();
 }

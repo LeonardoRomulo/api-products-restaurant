@@ -5,6 +5,6 @@ export const validarCategoria =(req, res, next) => {
         return res.status(400).json({erro: "Categoria inválida ou não informada"});
     }
 
-    req.category = category.trim();
+    req.category = category.trim().toLowerCase();
     next();
 }
