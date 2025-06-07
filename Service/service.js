@@ -1,4 +1,4 @@
-import { products } from "../data/data.js";
+import  products  from "../data/data.js";
 
 //retorna  todos os produtos
 export const searchProducts = () => {
@@ -14,8 +14,7 @@ export const searchProductsForName = (name) => {
 
 //Função que implementa a busca por id do produto
 export const searchProductsForId = (id) => {
-  const productId = parseInt(id);
-  return products.find((product) => product.id === productId);
+  return products.find((product) => product.id === id);
 };
 
 //Função que implementa a busca pela descrição
@@ -27,7 +26,6 @@ export const searchForDescription = (description) => {
 
 //Função que faz a busca pelo preço
 export const searchForPrice = (price) => {
-  const productPrice = parseFloat(price);
   return products.filter(product => product.price <= productPrice);
 };
 
@@ -35,6 +33,8 @@ export const searchForPrice = (price) => {
 export const searchForCategory = (category) => {
   return products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
 };
+
+//Funções que permitem adicionar, atualizar e deletar novos produtos (CRUD)
 
 //Adiciona um novo produto
 export const addProduct =(newProduct) => {

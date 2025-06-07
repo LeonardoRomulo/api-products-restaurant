@@ -5,7 +5,10 @@ import {
   searchProductsForId,
   searchForDescription,
   searchForPrice,
-  searchForCategory
+  searchForCategory,
+  addProduct,
+  updateProduct,
+  deleteProduct
 } from "./Service/service.js";
 
 //importação do express
@@ -21,48 +24,16 @@ app.use(express.json());
 
 //Rotas
 
-//rota que retorna toda a coleção de produtos
-app.get("/products", (req, res) => {
-  res.json(searchProducts());
-});
-//rota para busca de produtos através do nome
-app.get("/products/search/", (req, res) => {
-  const name = req.query.name;
-  const result = searchProductsForName(name);
-  res.json(result);
-});
-//rota para busca dos produtos através do id
-app.get("/products/:id", (req, res) => {
-  const product = searchProductsForId(req.params.id);
-  res.json(product);
-});
-//Implementação da busca por descrição
-app.get("/products/search/description/",(req,res) => {
-    const description = req.query.description; 
-    const result = searchForDescription(description);
-    res.json(result);
-});
-//implementação da busca por preço
-app.get("/products/search/price/:price", (req,res) => {
-  const price = req.params.price;
-  const result = searchForPrice(price);
-  res.json(result);
-});
+//- - - - - - - - - - - - - - - - - - - ><- - - - - - - - - - - - - - - //
 
-//implementação da busca por categoria
-app.get("/products/search/category/:category", (req,res) => {
-   const category = req.params.category;
-   const result = searchForCategory(category);
-   res.json(result);
-});
-
-
+//Cadastro de novos produtos na API+
 app.post("/products", (req,res) => {
   const newProduct = req.body;
   const created = addProduct(newProduct);
   res.status(201).json(created);
 });
 
+//Atualização de dados da api
 app.put("/products/:id", (req,res) => {
   const id = req.params.id;
   const updateData = req.body;
@@ -70,12 +41,14 @@ app.put("/products/:id", (req,res) => {
   updated ? res.json(updated) : res.status(404).json({error:"Produto não encontrado"});
 });
 
-app.delete("products/:id", (req,res) => {
+// Delete: (exclussão de dados da api)
+app.delete("/products/:id", (req,res) => {
   const id = req.params.id;
   const deleted = deleteProduct(id);
   deleted ? res.json({message: "Produto deletado com sucesso"}) : res.status(404).json({error:"Produto não encontrado"})
 });
 
+//porta em que o servidor vai ser rodado
 app.listen(8080, () => {
     const date = new Date();
     console.log(`Servidor iniciado em ${date}`);
