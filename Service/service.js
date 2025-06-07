@@ -26,7 +26,7 @@ export const searchForDescription = (description) => {
 
 //Função que faz a busca pelo preço
 export const searchForPrice = (price) => {
-  return products.filter(product => product.price <= productPrice);
+  return products.filter(product => product.price <= price);
 };
 
 //função que busca por categoria
