@@ -1,10 +1,10 @@
 export const validarId = (req, res, next) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
-    if(isNaN){
-        return res,stauts(400).json({erro: "O id precisa ser um número válido"});
+    if(isNaN(id) || id <= 0){
+        return res.status(400).json({erro: "O id precisa ser um número válido"});
     }
 
-    req.params = id;
+    req.id = id;
     next();
 }

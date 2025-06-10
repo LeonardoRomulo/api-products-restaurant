@@ -6,8 +6,8 @@ export const searchProducts = () => {
 };
 
 //função que implementa a busca pelo nome do produto
-export const searchProductsForName = (name) => {
-  return products.filter((product) =>
+export const searchProductsForName = (name, currentProducts = products) => {
+  return currentProducts.filter((product) =>
     product.name.toLocaleLowerCase().includes(name.toLowerCase())
   );
 };
@@ -18,20 +18,20 @@ export const searchProductsForId = (id) => {
 };
 
 //Função que implementa a busca pela descrição
-export const searchForDescription = (description) => {
-  return products.filter((product) =>
+export const searchForDescription = (description, currentProducts = products) => {
+  return currentProducts.filter((product) =>
     product.description.toLowerCase().includes(description.toLowerCase())
   );
 };
 
 //Função que faz a busca pelo preço
-export const searchForPrice = (price) => {
-  return products.filter(product => product.price <= price);
+export const searchForPrice = (price, currentProducts = products) => {
+  return currentProducts.filter(product => product.price <= price);
 };
 
 //função que busca por categoria
-export const searchForCategory = (category) => {
-  return products.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
+export const searchForCategory = (category, currentProducts = products) => {
+  return currentProducts.filter((product) => product.category.toLowerCase().includes(category.toLowerCase()));
 };
 
 //Funções que permitem adicionar, atualizar e deletar novos produtos (CRUD)

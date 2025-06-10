@@ -37,21 +37,60 @@ app.get("/products", (req, res) => {
 });
 
 //rota para busca de produtos através do nome
-app.get("/products/search/", validarNome, (req, res) => {
-  const result = searchProductsForName(req.name);
+app.get(
+  "/products/search",
+  validarNome,
+  validarCategoria,
+  validarDescricao,
+  validarPreco,
+  (req, res) => {
+    let result = [];
+    let searchPerformed = false;
+    let erroMessage = "";
 
-  //Verificando se há produtos encontrados com o nome buscado
-  if (!result || result.length === 0) {
-    return res
-      .status(404)
-      .json({ erro: "Nenhum produto encontrado com esse nome" });
-  }
-  res.json(result);
-});
+    if (req.name) {
+      result = searchProductsForName(req.name);
+      searchPerformed = true;
+      if (!result || result.length === 0) {
+        erroMessage = "Nenhum produto encontrado com esse nome";
+      } 
+    }else if (req.category) {
+        result = searchForCategory(req.category);
+        searchPerformed = true;
+        if (!result || result.length === 0) {
+          erroMessage = "Nenhum produto encontrado com essa categoria";
+        }
+      } else if (req.description) {
+        result = searchForDescription(req.description);
+        searchPerformed = true;
+        if (!result || result.length === 0) {
+          erroMessage = "Nenhum produto encontrado com essa descrição";
+        } 
+      }else if (req.price !== undefined) {
+          result = searchForPrice(req.price);
+          searchPerformed = true;
+          if (!result || result.length === 0) {
+            erroMessage = " Nenhum produto encontrado até o preço informado";
+          }
+        }
+
+        if (!searchPerformed) {
+          return res
+            .status(400)
+            .json({
+              erro: "Forneça um critério de busca válido (ex: ?name=valor, ?category=valor, ?description= valor ou ?price=valor).",
+            });
+        }
+
+        if (erroMessage) {
+          return res.status(404).json({ erroMessage });
+        }
+        return res.json(result);
+      }
+);
 
 //rota para busca dos produtos através do id
 app.get("/products/:id", validarId, (req, res) => {
-
   const product = searchProductsForId(req.id);
 
   //Validação caso o produto não seja encontrado
@@ -63,49 +102,7 @@ app.get("/products/:id", validarId, (req, res) => {
   res.json(product);
 });
 
-//Implementação da busca por descrição
-app.get("/products/search/description/", validarDescricao, (req, res) => {
-  const result = searchForDescription(req.description);
-
-  //Verificando se foi encontrado algum produto com a descrição fornecida
-
-  if (!result || result.length === 0) {
-    return res
-      .status(404)
-      .json({ erro: `Nenhum produto encontrado com a descrição informada` });
-  }
-
-  res.json(result);
-});
-
-//implementação da busca por preço
-app.get("/products/search/price/:price", validarPreco, (req, res) => {
-  const result = searchForPrice(req.price);
-
-  //validando se encontrou algum produto com o preço informado
-  if (!result || result.length === 0) {
-    return res
-      .status(404)
-      .json({ erro: "Nenhum produto encontrado até o preço informado" });
-  }
-
-  res.json(result);
-});
-
-//implementação da busca por categoria
-app.get("/products/search/category/:category", validarCategoria, (req, res) => {
-  const result = searchForCategory(req.category);
-
-  //Verificando se o produto foi encontrado com a categoria digitada
-  if (!result || result.length === 0) {
-    return res
-      .status(404)
-      .json({ erro: "Nenhum produto encontrado nessa categoria" });
-  }
-  res.json(result);
-});
-
-//- - - - - - - - - - - - - - - - - - - ><- - - - - - - - - - - - - - - //
+//- - - - - - - - - - - - - - - - - - - >Create, Update, Delete<- - - - - - - - - - - - - - - //
 
 //Cadastro de novos produtos na API+
 app.post("/products", (req, res) => {
